@@ -9,13 +9,13 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
+  id        String        @id @default(uuid())
+  email     String        @unique
   password  String?
-  role      Role[]
-  provider  Provider?
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  role      RoleEnum[]
+  provider  ProviderEnum?
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
   Post      Post[]
   Token     Token[]
 
@@ -42,12 +42,12 @@ model Token {
   userAgent String   @map("user_agent")
 }
 
-enum Role {
+enum RoleEnum {
   ADMIN
   USER
 }
 
-enum Provider {
+enum ProviderEnum {
   LOCAL
   GOOGLE
 }

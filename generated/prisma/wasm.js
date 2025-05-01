@@ -21,11 +21,11 @@ exports.$Enums = {}
 
 /**
  * Prisma Client JS version: 6.7.0
- * Query Engine version: 173f8d54f8d52e692c7e27e72a88314ec7aeff60
+ * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
  */
 Prisma.prismaVersion = {
   client: "6.7.0",
-  engine: "173f8d54f8d52e692c7e27e72a88314ec7aeff60"
+  engine: "3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -160,12 +160,12 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.Provider = exports.$Enums.Provider = {
+exports.ProviderEnum = exports.$Enums.ProviderEnum = {
   LOCAL: 'LOCAL',
   GOOGLE: 'GOOGLE'
 };
 
-exports.Role = exports.$Enums.Role = {
+exports.RoleEnum = exports.$Enums.RoleEnum = {
   ADMIN: 'ADMIN',
   USER: 'USER'
 };
