@@ -36,11 +36,11 @@ exports.$Enums = {}
 
 /**
  * Prisma Client JS version: 6.7.0
- * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
+ * Query Engine version: 173f8d54f8d52e692c7e27e72a88314ec7aeff60
  */
 Prisma.prismaVersion = {
   client: "6.7.0",
-  engine: "3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
+  engine: "173f8d54f8d52e692c7e27e72a88314ec7aeff60"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -176,12 +176,12 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../.env"
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.7.0",
-  "engineVersion": "3cff47a7f5d65c3ea74883f1d736e41d68ce91ed",
+  "engineVersion": "173f8d54f8d52e692c7e27e72a88314ec7aeff60",
   "datasourceNames": [
     "db"
   ],
@@ -189,13 +189,13 @@ const config = {
   "inlineDatasources": {
     "db": {
       "url": {
-        "fromEnvVar": null,
-        "value": "postgresql://postgres:root@localhost:5432/first_cours?schema=public"
+        "fromEnvVar": "DATABASE_URL",
+        "value": null
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:root@localhost:5432/first_cours?schema=public\"\n}\n\nmodel User {\n  id        String    @id @default(uuid())\n  email     String    @unique\n  password  String?\n  role      Role[]\n  provider  Provider?\n  createdAt DateTime  @default(now()) @map(\"created_at\")\n  updatedAt DateTime  @updatedAt @map(\"updated_at\")\n  Post      Post[]\n  Token     Token[]\n\n  @@map(\"users\")\n}\n\nmodel Post {\n  id        Int      @id @default(autoincrement())\n  title     String\n  content   String\n  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)\n  userId    String?\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  @@map(\"posts\")\n}\n\nmodel Token {\n  token     String   @unique\n  exp       DateTime\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  userId    String\n  userAgent String   @map(\"user_agent\")\n}\n\nenum Role {\n  ADMIN\n  USER\n}\n\nenum Provider {\n  LOCAL\n  GOOGLE\n}\n",
-  "inlineSchemaHash": "61edd49877eb38ccde77ea9227307c8bb223a5d4998255320136273246145317",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String    @id @default(uuid())\n  email     String    @unique\n  password  String?\n  role      Role[]\n  provider  Provider?\n  createdAt DateTime  @default(now()) @map(\"created_at\")\n  updatedAt DateTime  @updatedAt @map(\"updated_at\")\n  Post      Post[]\n  Token     Token[]\n\n  @@map(\"users\")\n}\n\nmodel Post {\n  id        Int      @id @default(autoincrement())\n  title     String\n  content   String\n  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)\n  userId    String?\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  @@map(\"posts\")\n}\n\nmodel Token {\n  token     String   @unique\n  exp       DateTime\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n  userId    String\n  userAgent String   @map(\"user_agent\")\n}\n\nenum Role {\n  ADMIN\n  USER\n}\n\nenum Provider {\n  LOCAL\n  GOOGLE\n}\n",
+  "inlineSchemaHash": "ee7d5fb9368285ba7ed7afad0bd80bb455ea1a6a09cd3d5018c7b6efe86fa530",
   "copyEngine": true
 }
 config.dirname = '/'
@@ -206,7 +206,9 @@ config.engineWasm = undefined
 config.compilerWasm = undefined
 
 config.injectableEdgeEnv = () => ({
-  parsed: {}
+  parsed: {
+    DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.DATABASE_URL || undefined
+  }
 })
 
 if (typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !== 'undefined' && process.env && process.env.DEBUG || undefined) {
