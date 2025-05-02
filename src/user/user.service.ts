@@ -2,6 +2,7 @@ import {
     BadRequestException,
     Injectable,
     InternalServerErrorException,
+    NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/index.dto';
@@ -35,5 +36,26 @@ export class UserService {
         }
 
         return user;
+    }
+
+    async findUser(idOrEmail: string): Promise<User> {
+        const user = await this.prismaService.user.findFirst({
+            where: {
+                OR: [{ id: idOrEmail }, { email: idOrEmail }],
+            },
+            include: {
+                Post: true,
+            },
+        });
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        return user;
+    }
+
+    async findAllUsesrs(): Promise<User[]> {
+        return await this.prismaService.user.findMany();
     }
 }
