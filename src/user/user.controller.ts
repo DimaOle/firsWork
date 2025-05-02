@@ -5,10 +5,11 @@ import {
     Get,
     Param,
     Post,
+    Put,
     UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/index.dto';
+import { RoleDto, CreateUserDto } from './dto';
 import { ResponseUser } from './response';
 
 @Controller('user')
@@ -36,6 +37,20 @@ export class UserController {
     @Get(':idOrEmail')
     async findUser(@Param('idOrEmail') idOrEmail: string) {
         const user = await this.userService.findUser(idOrEmail);
+        return new ResponseUser(user);
+    }
+
+    @UseInterceptors(ClassSerializerInterceptor)
+    @Put('addRole')
+    async addRole(@Body() addRoleDto: RoleDto) {
+        const user = await this.userService.addRole(addRoleDto);
+        return new ResponseUser(user);
+    }
+
+    @UseInterceptors(ClassSerializerInterceptor)
+    @Put('deleteRole')
+    async deleteRole(@Body() addRoleDto: RoleDto) {
+        const user = await this.userService.deleteRole(addRoleDto);
         return new ResponseUser(user);
     }
 }
