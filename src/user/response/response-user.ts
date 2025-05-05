@@ -1,5 +1,5 @@
+import { Post, ProviderEnum, RoleEnum, Token, User } from '@prisma/client';
 import { Exclude } from 'class-transformer';
-import { Post, ProviderEnum, RoleEnum, Token, User } from 'generated/prisma';
 
 export class ResponseUser implements User {
     constructor(user: User) {

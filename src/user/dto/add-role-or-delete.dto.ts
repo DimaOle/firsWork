@@ -1,6 +1,5 @@
+import { RoleEnum } from '@prisma/client';
 import { IsEnum, IsUUID } from 'class-validator';
-import { RoleEnum } from 'generated/prisma';
-
 export class RoleDto {
     @IsUUID()
     id: string;

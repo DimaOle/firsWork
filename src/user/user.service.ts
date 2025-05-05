@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RoleDto, CreateUserDto } from './dto';
-import { RoleEnum, ProviderEnum, User } from 'generated/prisma';
 import * as bcrypt from 'bcrypt';
+import { User, RoleEnum, ProviderEnum } from '@prisma/client';
 
 @Injectable()
 export class UserService {

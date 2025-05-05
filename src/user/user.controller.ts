@@ -6,11 +6,15 @@ import {
     Param,
     Post,
     Put,
+    UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RoleDto, CreateUserDto } from './dto';
 import { ResponseUser } from './response';
+import { Roles } from 'libs/common/src/decorators';
+import { RolesGuard } from 'libs/common/src/guards/roles.guard';
+import { RoleEnum } from '@prisma/client';
 
 @Controller('user')
 export class UserController {
@@ -32,7 +36,8 @@ export class UserController {
         const users = await this.userService.findAllUsesrs();
         return users.map((el) => new ResponseUser(el));
     }
-
+    @UseGuards(RolesGuard)
+    @Roles(RoleEnum.USER, RoleEnum.ADMIN)
     @UseInterceptors(ClassSerializerInterceptor)
     @Get(':idOrEmail')
     async findUser(@Param('idOrEmail') idOrEmail: string) {
