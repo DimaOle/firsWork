@@ -94,7 +94,7 @@ export class PostsService {
 
     async getPostByTags(page: number, tags: string) {
         const pageStart = Number(page) || 1;
-        const limit = 2;
+        const limit = 5;
         const skip = (pageStart - 1) * limit;
         const arrTags = tags
             .split(',')
@@ -148,5 +148,23 @@ export class PostsService {
                     tags: el.tags.map((tag) => tag.name),
                 }),
         );
+    }
+
+    async getPosts(page: number) {
+        const pageStart = Number(page) || 1;
+        const limit = 5;
+        const skip = (pageStart - 1) * limit;
+        const posts = await this.prismaService.post.findMany({
+            skip,
+            take: limit,
+            include: { tags: true },
+        });
+
+        return posts.map((el) => {
+            return new PostEntity({
+                ...el,
+                tags: el.tags.map((tag) => tag.name),
+            });
+        });
     }
 }

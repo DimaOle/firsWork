@@ -26,8 +26,9 @@ export class AuthService {
 
     async register(dto: RegisterUserDto, userAgent: string) {
         const user = await this.prismaService.user.findUnique({
-            where: { email: dto.password },
+            where: { email: dto.email },
         });
+        console.log(user);
         if (user) {
             throw new BadRequestException('try to another email');
         }

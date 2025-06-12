@@ -13,6 +13,7 @@ import { PostsService } from './posts.service';
 import {
     CreatePostDto,
     DeletePostDto,
+    GetAllPosts,
     GetOnePostDto,
     GetPostsByAuthor,
     GetPostsByTags,
@@ -57,5 +58,11 @@ export class PostsController {
     getPostsByAuthor(@Query() dto: GetPostsByAuthor) {
         const page = dto.page ?? 1;
         return this.postsService.getPostByAuthor(dto.authorId, page);
+    }
+
+    @Get()
+    @UseInterceptors(ClassSerializerInterceptor)
+    getPosts(@Query() dto: GetAllPosts) {
+        return this.postsService.getPosts(dto.page);
     }
 }
