@@ -8,6 +8,8 @@ export class ResponseUser implements User {
 
     id: string;
     email: string;
+    firstName: string | null;
+    lastName: string | null;
 
     @Exclude()
     password: string;

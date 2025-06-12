@@ -38,6 +38,8 @@ export class AuthService {
             data: {
                 email: dto.email,
                 password: hashPassword,
+                firstName: dto.firstName,
+                lastName: dto.lastName,
                 role: [RoleEnum.USER],
                 provider: ProviderEnum.LOCAL,
             },
