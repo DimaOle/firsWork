@@ -9,7 +9,7 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginUserDto } from './dto';
+import { LoginUserDto, RegisterUserDto } from './dto';
 import { Public } from 'libs/common/src/decorators/public.decorator';
 import { Request, Response } from 'express';
 import { VerifiedRefreshToken } from './guards';
@@ -35,6 +35,18 @@ export class AuthController {
         );
         this.authCookie.setRefreshToken(res, refreshToken);
         return { accessToken };
+    }
+
+    @Post('register')
+    @Public()
+    async register(
+        @Body() dto: RegisterUserDto,
+        @Headers('user-agent') userAgent: string,
+        @Res({ passthrough: true }) res: Response,
+    ) {
+        const userToken = await this.authService.register(dto, userAgent);
+        this.authCookie.setRefreshToken(res, userToken.refreshToken);
+        return { accessToken: userToken.accessToken };
     }
 
     @Get('refresh-token')

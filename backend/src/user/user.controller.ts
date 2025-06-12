@@ -4,29 +4,20 @@ import {
     Controller,
     Get,
     Param,
-    Post,
     Put,
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { RoleDto, CreateUserDto } from './dto';
+import { RoleDto } from './dto';
 import { ResponseUser } from './response';
 import { Roles } from 'libs/common/src/decorators';
 import { RolesGuard } from 'libs/common/src/guards/roles.guard';
 import { RoleEnum } from '@prisma/client';
-import { Public } from 'libs/common/src/decorators/public.decorator';
 
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) {}
-    @Public()
-    @UseInterceptors(ClassSerializerInterceptor)
-    @Post('created')
-    async created(@Body() dto: CreateUserDto) {
-        const user = await this.userService.creat(dto);
-        return new ResponseUser(user);
-    }
 
     @UseInterceptors(ClassSerializerInterceptor)
     @Get('allUsers')

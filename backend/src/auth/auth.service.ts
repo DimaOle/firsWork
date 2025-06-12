@@ -1,12 +1,14 @@
 import {
+    BadRequestException,
     Injectable,
+    InternalServerErrorException,
     NotFoundException,
     UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { LoginUserDto } from './dto';
-import { RoleEnum } from '@prisma/client';
+import { LoginUserDto, RegisterUserDto } from './dto';
+import { ProviderEnum, RoleEnum } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import ms from 'ms';
@@ -21,6 +23,43 @@ export class AuthService {
         readonly prismaService: PrismaService,
         private configService: ConfigService,
     ) {}
+
+    async register(dto: RegisterUserDto, userAgent: string) {
+        const user = await this.prismaService.user.findUnique({
+            where: { email: dto.password },
+        });
+        if (user) {
+            throw new BadRequestException('try to another email');
+        }
+        const hashPassword = await bcrypt.hash(dto.password, 10);
+
+        const userCreate = await this.prismaService.user.create({
+            data: {
+                email: dto.email,
+                password: hashPassword,
+                role: [RoleEnum.USER],
+                provider: ProviderEnum.LOCAL,
+            },
+        });
+
+        if (!userCreate) {
+            throw new InternalServerErrorException('Try again later');
+        }
+
+        const jwtToken = await this.createJwtToken(
+            userCreate.id,
+            userCreate.email,
+            userCreate.role,
+        );
+        const refreshToken = await this.createRefreshToken(
+            userCreate.id,
+            userAgent,
+        );
+        return {
+            accessToken: 'Bearer ' + jwtToken,
+            refreshToken: refreshToken,
+        };
+    }
 
     async login(
         dto: LoginUserDto,
